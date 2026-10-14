@@ -87,17 +87,17 @@ async function main() {
     console.error("Seed failed:", err.message);
   }
 
-  // Step 4: Start Express Frontend Server
-  console.log("[4/4] Starting Web Frontend Server on http://localhost:3000...");
+  // Step 4: Start Express Frontend Server on Port 5000
+  console.log("[4/4] Starting Web Frontend Server on http://localhost:5000...");
   require("./server.js");
 
   // Automatically open browser
   const startCmd =
     process.platform === "win32"
-      ? "start http://localhost:3000"
+      ? "start http://localhost:5000"
       : process.platform === "darwin"
-      ? "open http://localhost:3000"
-      : "xdg-open http://localhost:3000";
+      ? "open http://localhost:5000"
+      : "xdg-open http://localhost:5000";
 
   setTimeout(() => {
     try {
@@ -108,7 +108,7 @@ async function main() {
   }, 1500);
 
   console.log("\n==========================================================");
-  console.log(">> APP READY AT: http://localhost:3000");
+  console.log(">> APP READY AT: http://localhost:5000");
   console.log(">> Press Ctrl + C to stop the application.");
   console.log("==========================================================\n");
 }
