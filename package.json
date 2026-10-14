@@ -1,0 +1,31 @@
+{
+  "name": "charitychain-blockchain-dapp",
+  "version": "1.0.0",
+  "description": "Decentralized and Transparent Charity Platform on Ethereum Blockchain",
+  "main": "index.js",
+  "scripts": {
+    "node": "hardhat node",
+    "compile": "hardhat compile",
+    "test": "hardhat test",
+    "deploy:local": "hardhat run scripts/deploy.js --network localhost",
+    "seed:local": "hardhat run scripts/seed.js --network localhost",
+    "start": "node server.js"
+  },
+  "keywords": [
+    "blockchain",
+    "solidity",
+    "charity",
+    "ethereum",
+    "dapp",
+    "smart-contracts"
+  ],
+  "author": "BE Computer Engineering",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.19.2"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^4.0.0",
+    "hardhat": "^2.22.2"
+  }
+}

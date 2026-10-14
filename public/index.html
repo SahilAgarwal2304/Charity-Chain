@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CharityChain | Transparent Blockchain Charity dApp</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- FontAwesome Icons CDN -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <!-- Ethers.js v6 UMD CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.11.1/ethers.umd.min.js"></script>
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            brand: {
+              50: '#ecfdf5',
+              100: '#d1fae5',
+              500: '#10b981',
+              600: '#059669',
+              700: '#047857',
+            },
+            dark: {
+              bg: '#0B0F19',
+              card: '#111827',
+              border: '#1F2937',
+              input: '#1A2234'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      background-color: #0B0F19;
+      color: #E2E8F0;
+      font-family: 'Inter', sans-serif;
+    }
+    .gradient-text {
+      background: linear-gradient(135deg, #34D399 0%, #3B82F6 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .glass-card {
+      background: rgba(17, 24, 39, 0.75);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .glass-card:hover {
+      border-color: rgba(52, 211, 153, 0.3);
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #374151;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col antialiased selection:bg-emerald-500 selection:text-white">
+
+  <!-- TOP ANNOUNCEMENT BANNER -->
+  <div class="bg-gradient-to-r from-emerald-900/60 via-slate-900 to-blue-900/60 border-b border-emerald-500/20 px-4 py-2 text-xs text-center text-emerald-300 font-medium flex items-center justify-center gap-2">
+    <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
+      <i class="fa-solid fa-graduation-cap mr-1.5"></i> SPPU BE Computer Engineering
+    </span>
+    <span>Mini Project Option 8: Blockchain based Application for Transparent & Genuine Charity</span>
+  </div>
+
+  <!-- NAVBAR -->
+  <header class="sticky top-0 z-40 bg-slate-950/80 backdrop-blur-md border-b border-slate-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      
+      <!-- Logo -->
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-500 to-blue-600 flex items-center justify-center shadow-lg shadow-emerald-500/20">
+          <i class="fa-solid fa-hand-holding-heart text-white text-lg"></i>
+        </div>
+        <div>
+          <span class="text-xl font-bold tracking-tight text-white flex items-center gap-1.5">
+            Charity<span class="text-emerald-400">Chain</span>
+            <span class="text-[10px] uppercase font-mono px-1.5 py-0.5 rounded bg-slate-800 text-slate-400 border border-slate-700">dApp</span>
+          </span>
+          <p class="text-[10px] text-slate-400 hidden sm:block">Zero-Intermediary Trustless Philanthropy</p>
+        </div>
+      </div>
+
+      <!-- Center Nav Tabs -->
+      <nav class="hidden md:flex items-center space-x-1 bg-slate-900/80 p-1 rounded-xl border border-slate-800">
+        <button onclick="switchTab('explore')" id="tab-explore" class="tab-btn px-4 py-1.5 rounded-lg text-xs font-medium transition text-emerald-400 bg-emerald-500/10 border border-emerald-500/20">
+          <i class="fa-solid fa-compass mr-1.5"></i> Explore
+        </button>
+        <button onclick="switchTab('create')" id="tab-create" class="tab-btn px-4 py-1.5 rounded-lg text-xs font-medium transition text-slate-400 hover:text-white">
+          <i class="fa-solid fa-plus-circle mr-1.5"></i> New Campaign
+        </button>
+        <button onclick="switchTab('ledger')" id="tab-ledger" class="tab-btn px-4 py-1.5 rounded-lg text-xs font-medium transition text-slate-400 hover:text-white">
+          <i class="fa-solid fa-receipt mr-1.5"></i> Public Ledger
+        </button>
+        <button onclick="switchTab('withdraw')" id="tab-withdraw" class="tab-btn px-4 py-1.5 rounded-lg text-xs font-medium transition text-slate-400 hover:text-white">
+          <i class="fa-solid fa-hand-holding-dollar mr-1.5"></i> Disburse
+        </button>
+        <button onclick="switchTab('architecture')" id="tab-architecture" class="tab-btn px-4 py-1.5 rounded-lg text-xs font-medium transition text-slate-400 hover:text-white">
+          <i class="fa-solid fa-circle-info mr-1.5"></i> Architecture & Viva
+        </button>
+      </nav>
+
+      <!-- Right Action Tools -->
+      <div class="flex items-center gap-3">
+        <!-- Mode Switcher (Web3 vs Lab Simulation) -->
+        <div class="relative">
+          <button id="mode-badge" onclick="toggleSimMode()" title="Click to toggle between Live MetaMask and Lab Demo Mode" class="flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-medium bg-slate-900 border border-slate-700 text-slate-300 hover:border-slate-600 transition">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" id="mode-dot"></span>
+            <span id="mode-label">Web3 Mode</span>
+            <i class="fa-solid fa-repeat text-[10px] text-slate-400 ml-1"></i>
+          </button>
+        </div>
+
+        <!-- Connect Wallet Button -->
+        <button id="connect-wallet-btn" onclick="connectWallet()" class="flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-400 hover:to-emerald-500 text-slate-950 shadow-md shadow-emerald-500/20 transition-all duration-200">
+          <i class="fa-solid fa-wallet text-sm"></i>
+          <span id="wallet-btn-text">Connect Wallet</span>
+        </button>
+      </div>
+
+    </div>
+    
+    <!-- Mobile Navigation Bar -->
+    <div class="md:hidden flex items-center justify-around bg-slate-900 border-t border-slate-800 p-2 text-xs">
+      <button onclick="switchTab('explore')" class="text-emerald-400"><i class="fa-solid fa-compass"></i> Explore</button>
+      <button onclick="switchTab('create')" class="text-slate-400"><i class="fa-solid fa-plus-circle"></i> Create</button>
+      <button onclick="switchTab('ledger')" class="text-slate-400"><i class="fa-solid fa-receipt"></i> Ledger</button>
+      <button onclick="switchTab('withdraw')" class="text-slate-400"><i class="fa-solid fa-hand-holding-dollar"></i> Disburse</button>
+      <button onclick="switchTab('architecture')" class="text-slate-400"><i class="fa-solid fa-circle-info"></i> Info</button>
+    </div>
+  </header>
+
+  <!-- MAIN CONTAINER -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+
+    <!-- HERO / STATS SECTION -->
+    <section class="glass-card rounded-2xl p-6 sm:p-8 border border-slate-800 relative overflow-hidden">
+      <div class="absolute -right-20 -top-20 w-80 h-80 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="absolute -left-20 -bottom-20 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+      <div class="relative z-10 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+        <div class="space-y-3 max-w-2xl">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-800/80 border border-slate-700 text-slate-300 text-xs">
+            <i class="fa-solid fa-shield-halved text-emerald-400"></i>
+            <span>Tamper-Proof Smart Contracts on Ethereum</span>
+          </div>
+          <h1 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+            Transparent Philanthropy <br>
+            <span class="gradient-text">Powered by Decentralized Trust</span>
+          </h1>
+          <p class="text-sm text-slate-400 leading-relaxed">
+            Eliminating NGO fraud and high administrative overheads. Every donation is recorded on an immutable distributed ledger with smart contract controlled escrow releases.
+          </p>
+
+          <!-- Quick Action Buttons -->
+          <div class="flex flex-wrap items-center gap-3 pt-2">
+            <button onclick="switchTab('create')" class="px-4 py-2 rounded-xl text-xs font-semibold bg-emerald-500 text-slate-950 hover:bg-emerald-400 transition flex items-center gap-2">
+              <i class="fa-solid fa-plus"></i> Start a Cause
+            </button>
+            <button onclick="openMetaMaskHelperModal()" class="px-4 py-2 rounded-xl text-xs font-semibold bg-slate-800 text-slate-200 hover:bg-slate-700 border border-slate-700 transition flex items-center gap-2">
+              <i class="fa-brands fa-ethereum text-emerald-400"></i> Local Network Helper
+            </button>
+          </div>
+        </div>
+
+        <!-- KPI STATS CARDS -->
+        <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 w-full lg:w-auto">
+          
+          <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-4 text-center">
+            <div class="text-[11px] font-medium text-slate-400 uppercase tracking-wider mb-1">
+              <i class="fa-brands fa-ethereum text-emerald-400 mr-1"></i> Total Raised
+            </div>
+            <div class="text-2xl font-bold text-white font-mono" id="stat-total-eth">0.00 ETH</div>
+            <div class="text-[10px] text-emerald-400 mt-1 flex items-center justify-center gap-1">
+              <i class="fa-solid fa-check-circle text-[9px]"></i> Verified on-chain
+            </div>
+          </div>
+
+          <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-4 text-center">
+            <div class="text-[11px] font-medium text-slate-400 uppercase tracking-wider mb-1">
+              <i class="fa-solid fa-bullhorn text-blue-400 mr-1"></i> Active Causes
+            </div>
+            <div class="text-2xl font-bold text-white font-mono" id="stat-campaigns-count">0</div>
+            <div class="text-[10px] text-slate-400 mt-1">Verified campaigns</div>
+          </div>
+
+          <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-4 text-center col-span-2 sm:col-span-1">
+            <div class="text-[11px] font-medium text-slate-400 uppercase tracking-wider mb-1">
+              <i class="fa-solid fa-receipt text-amber-400 mr-1"></i> Total Donations
+            </div>
+            <div class="text-2xl font-bold text-white font-mono" id="stat-donations-count">0</div>
+            <div class="text-[10px] text-slate-400 mt-1">Immutable transactions</div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 1: EXPLORE CAMPAIGNS -->
+    <section id="section-explore" class="space-y-6">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <h2 class="text-xl font-bold text-white flex items-center gap-2">
+            <i class="fa-solid fa-hand-holding-heart text-emerald-400"></i> Active Fundraising Campaigns
+          </h2>
+          <p class="text-xs text-slate-400">Select any cause below to donate directly using test Ether.</p>
+        </div>
+
+        <!-- Filter Category Pills -->
+        <div class="flex items-center gap-1.5 overflow-x-auto pb-2 sm:pb-0" id="category-filters">
+          <button onclick="filterCategory('All')" class="cat-pill active px-3 py-1 rounded-lg text-xs font-medium bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">All</button>
+          <button onclick="filterCategory('Healthcare')" class="cat-pill px-3 py-1 rounded-lg text-xs font-medium bg-slate-900 text-slate-400 hover:text-white border border-slate-800">Healthcare</button>
+          <button onclick="filterCategory('Education')" class="cat-pill px-3 py-1 rounded-lg text-xs font-medium bg-slate-900 text-slate-400 hover:text-white border border-slate-800">Education</button>
+          <button onclick="filterCategory('Disaster Relief')" class="cat-pill px-3 py-1 rounded-lg text-xs font-medium bg-slate-900 text-slate-400 hover:text-white border border-slate-800">Disaster Relief</button>
+        </div>
+      </div>
+
+      <!-- Campaign Grid -->
+      <div id="campaigns-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Rendered dynamically via app.js -->
+        <div class="col-span-full py-16 text-center text-slate-500">
+          <i class="fa-solid fa-spinner fa-spin text-3xl mb-3 text-emerald-400"></i>
+          <p class="text-sm">Loading campaigns from smart contract...</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 2: CREATE CAMPAIGN -->
+    <section id="section-create" class="hidden max-w-3xl mx-auto">
+      <div class="glass-card rounded-2xl p-6 sm:p-8 border border-slate-800 shadow-xl space-y-6">
+        <div>
+          <span class="text-xs font-semibold uppercase tracking-wider text-emerald-400">Verified Cause Onboarding</span>
+          <h2 class="text-2xl font-bold text-white mt-1">Deploy a New Fundraising Campaign</h2>
+          <p class="text-xs text-slate-400 mt-1">
+            This will trigger a smart contract transaction (`createCampaign`) on Ethereum. Once created, the campaign parameters are permanently immutable.
+          </p>
+        </div>
+
+        <form id="create-campaign-form" onsubmit="handleCreateCampaign(event)" class="space-y-4">
+          <!-- Title -->
+          <div>
+            <label class="block text-xs font-medium text-slate-300 mb-1">Campaign Title *</label>
+            <input type="text" id="new-title" required placeholder="e.g. Emergency Oxygen Concentrators for District Hospital" 
+              class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-emerald-500 transition" />
+          </div>
+
+          <!-- Category & Target ETH -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-medium text-slate-300 mb-1">Category *</label>
+              <select id="new-category" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-emerald-500 transition">
+                <option value="Healthcare">Healthcare & Medical</option>
+                <option value="Education">Education & Rural Schools</option>
+                <option value="Disaster Relief">Disaster Relief & Flood Support</option>
+                <option value="Child Welfare">Child Welfare & Nutrition</option>
+                <option value="Animal Welfare">Animal Welfare & Rescue</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-xs font-medium text-slate-300 mb-1">Funding Target (ETH) *</label>
+              <div class="relative">
+                <input type="number" step="0.01" min="0.01" id="new-target" required placeholder="e.g. 2.5" 
+                  class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-emerald-500 transition pr-14" />
+                <span class="absolute right-3 top-2.5 text-xs font-mono font-bold text-emerald-400">ETH</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Duration & Beneficiary -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-medium text-slate-300 mb-1">Duration (in Days) *</label>
+              <input type="number" min="1" max="365" id="new-duration" value="30" required 
+                class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-emerald-500 transition" />
+            </div>
+
+            <div>
+              <label class="block text-xs font-medium text-slate-300 mb-1">Beneficiary Address (Ethereum Wallet) *</label>
+              <input type="text" id="new-beneficiary" required placeholder="0x... (Recipient of funds)" 
+                class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm font-mono text-white focus:outline-none focus:border-emerald-500 transition" />
+              <p class="text-[10px] text-slate-500 mt-1">Can be your connected wallet or hospital/NGO vendor wallet.</p>
+            </div>
+          </div>
+
+          <!-- Description -->
+          <div>
+            <label class="block text-xs font-medium text-slate-300 mb-1">Detailed Story & Breakdown *</label>
+            <textarea id="new-description" rows="4" required placeholder="Explain why funds are needed, how every rupee/wei will be spent, and proof of cause..." 
+              class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-emerald-500 transition"></textarea>
+          </div>
+
+          <!-- Submit -->
+          <div class="pt-4 flex items-center justify-end gap-3">
+            <button type="button" onclick="switchTab('explore')" class="px-5 py-2.5 rounded-xl text-xs font-semibold text-slate-400 hover:text-white bg-slate-800 transition">
+              Cancel
+            </button>
+            <button type="submit" id="submit-campaign-btn" class="px-6 py-2.5 rounded-xl text-xs font-bold bg-emerald-500 text-slate-950 hover:bg-emerald-400 shadow-lg shadow-emerald-500/20 transition flex items-center gap-2">
+              <i class="fa-solid fa-cloud-arrow-up"></i> Deploy Campaign to Blockchain
+            </button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- TAB 3: PUBLIC TRANSPARENCY LEDGER -->
+    <section id="section-ledger" class="hidden space-y-6">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <h2 class="text-xl font-bold text-white flex items-center gap-2">
+            <i class="fa-solid fa-receipt text-emerald-400"></i> Public Transparency Ledger
+          </h2>
+          <p class="text-xs text-slate-400">
+            Real-time feed of all on-chain donations. In traditional charities this ledger is private; in Web3 it is 100% public.
+          </p>
+        </div>
+        <div class="flex items-center gap-2">
+          <button onclick="refreshData()" class="px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-900 border border-slate-700 text-slate-300 hover:text-white transition flex items-center gap-1.5">
+            <i class="fa-solid fa-arrows-rotate text-emerald-400"></i> Refresh Ledger
+          </button>
+        </div>
+      </div>
+
+      <!-- Ledger Table -->
+      <div class="glass-card rounded-2xl border border-slate-800 overflow-hidden shadow-xl">
+        <div class="overflow-x-auto custom-scrollbar">
+          <table class="w-full text-left text-xs text-slate-300">
+            <thead class="bg-slate-950/90 text-[11px] uppercase tracking-wider text-slate-400 border-b border-slate-800">
+              <tr>
+                <th class="px-4 py-3.5">Campaign</th>
+                <th class="px-4 py-3.5">Donor Address</th>
+                <th class="px-4 py-3.5">Amount (ETH)</th>
+                <th class="px-4 py-3.5">Time (UTC)</th>
+                <th class="px-4 py-3.5">Donor Message</th>
+                <th class="px-4 py-3.5">Proof / Tx Hash</th>
+              </tr>
+            </thead>
+            <tbody id="ledger-table-body" class="divide-y divide-slate-800/60 font-mono">
+              <!-- Dynamically populated -->
+              <tr>
+                <td colspan="6" class="px-4 py-8 text-center text-slate-500">
+                  <i class="fa-solid fa-circle-notch fa-spin text-lg mb-2 text-emerald-400"></i>
+                  <p>Loading transparency logs...</p>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 4: DISBURSE / WITHDRAW FUNDS -->
+    <section id="section-withdraw" class="hidden max-w-4xl mx-auto space-y-6">
+      <div>
+        <h2 class="text-xl font-bold text-white flex items-center gap-2">
+          <i class="fa-solid fa-hand-holding-dollar text-emerald-400"></i> Smart Contract Escrow & Disbursal
+        </h2>
+        <p class="text-xs text-slate-400 mt-1">
+          Demonstrates smart contract security logic: Funds are held in escrow until the target is met or deadline passes. Only the verified creator or beneficiary can trigger fund release.
+        </p>
+      </div>
+
+      <div id="disburse-campaigns-list" class="space-y-4">
+        <!-- Rendered dynamically -->
+        <div class="glass-card rounded-2xl p-8 text-center text-slate-500">
+          <p>Loading disbursable campaigns...</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 5: ARCHITECTURE & VIVA EXPLANATION -->
+    <section id="section-architecture" class="hidden space-y-8">
+      <div>
+        <span class="text-xs font-semibold uppercase tracking-wider text-emerald-400">Project Viva & Defense Guide</span>
+        <h2 class="text-2xl font-bold text-white mt-1">System Architecture & Technical Viva Q&A</h2>
+        <p class="text-xs text-slate-400 mt-1">
+          Everything you need to confidently answer external examiners during practical oral examination.
+        </p>
+      </div>
+
+      <!-- Comparison Diagram -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        
+        <!-- Traditional Charity -->
+        <div class="glass-card rounded-2xl p-6 border border-rose-900/40 bg-gradient-to-br from-rose-950/20 to-slate-900">
+          <div class="flex items-center gap-2 text-rose-400 font-bold text-sm mb-3">
+            <i class="fa-solid fa-triangle-exclamation"></i> Traditional Charity (Problems)
+          </div>
+          <ul class="text-xs text-slate-300 space-y-2.5">
+            <li class="flex items-start gap-2">
+              <i class="fa-solid fa-xmark text-rose-400 mt-0.5"></i>
+              <span><strong>Opaque Ledger:</strong> Donors have no visibility into how funds are actually spent.</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <i class="fa-solid fa-xmark text-rose-400 mt-0.5"></i>
+              <span><strong>High Middlemen Fees:</strong> Banks & payment aggregators take 3% to 10% cut.</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <i class="fa-solid fa-xmark text-rose-400 mt-0.5"></i>
+              <span><strong>Central Point of Failure:</strong> Centralized databases can be altered, wiped, or fabricated.</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <i class="fa-solid fa-xmark text-rose-400 mt-0.5"></i>
+              <span><strong>Misappropriation:</strong> Founders can redirect donations without donor knowledge.</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- CharityChain dApp -->
+        <div class="glass-card rounded-2xl p-6 border border-emerald-900/40 bg-gradient-to-br from-emerald-950/20 to-slate-900">
+          <div class="flex items-center gap-2 text-emerald-400 font-bold text-sm mb-3">
+            <i class="fa-solid fa-shield-check"></i> CharityChain Solution (Our Project)
+          </div>
+          <ul class="text-xs text-slate-300 space-y-2.5">
+            <li class="flex items-start gap-2">
+              <i class="fa-solid fa-check text-emerald-400 mt-0.5"></i>
+              <span><strong>100% Immutability:</strong> Every donation is cryptographically sealed in blocks.</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <i class="fa-solid fa-check text-emerald-400 mt-0.5"></i>
+              <span><strong>Direct Peer-to-Peer:</strong> Smart contracts eliminate administrative middlemen.</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <i class="fa-solid fa-check text-emerald-400 mt-0.5"></i>
+              <span><strong>Automated Escrow:</strong> Funds locked in Solidity contract until rules are satisfied.</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <i class="fa-solid fa-check text-emerald-400 mt-0.5"></i>
+              <span><strong>Zero Intermediary Trust:</strong> Code is law — neither creator nor admin can steal funds.</span>
+            </li>
+          </ul>
+        </div>
+
+      </div>
+
+      <!-- Top Viva Questions Accordion -->
+      <div class="glass-card rounded-2xl p-6 border border-slate-800 space-y-4">
+        <h3 class="text-lg font-bold text-white flex items-center gap-2">
+          <i class="fa-solid fa-circle-question text-emerald-400"></i> Quick Viva Cheat Sheet (Examiner FAQs)
+        </h3>
+
+        <div class="space-y-3 text-xs">
+          <!-- Q1 -->
+          <details class="bg-slate-900/80 border border-slate-800 rounded-xl p-4 cursor-pointer group">
+            <summary class="font-semibold text-white flex items-center justify-between">
+              <span>1. Why use Blockchain? Why not a standard SQL/NoSQL database?</span>
+              <i class="fa-solid fa-chevron-down text-slate-500 group-open:rotate-180 transition"></i>
+            </summary>
+            <p class="text-slate-300 mt-2.5 leading-relaxed pl-2 border-l-2 border-emerald-500">
+              <strong>Answer:</strong> In a traditional database (MySQL/PostgreSQL), the database administrator (DBA) or server owner has root access and can easily execute <code class="text-emerald-300">UPDATE</code> or <code class="text-emerald-300">DELETE</code> queries to manipulate donation amounts or falsify transactions. On Ethereum blockchain, once a transaction is mined, it is permanently immutable. Smart contracts guarantee that funds can only be released to designated beneficiaries.
+            </p>
+          </details>
+
+          <!-- Q2 -->
+          <details class="bg-slate-900/80 border border-slate-800 rounded-xl p-4 cursor-pointer group">
+            <summary class="font-semibold text-white flex items-center justify-between">
+              <span>2. What is a Smart Contract and how does it work here?</span>
+              <i class="fa-solid fa-chevron-down text-slate-500 group-open:rotate-180 transition"></i>
+            </summary>
+            <p class="text-slate-300 mt-2.5 leading-relaxed pl-2 border-l-2 border-emerald-500">
+              <strong>Answer:</strong> A smart contract is self-executing code stored on the blockchain at a specific cryptographic address. In CharityChain, our Solidity contract (`CharityPlatform.sol`) acts as an automated escrow: it tracks campaigns, receives Ether via the `donate()` function, updates balances, and releases funds via `withdrawFunds()` strictly according to programmed rules.
+            </p>
+          </details>
+
+          <!-- Q3 -->
+          <details class="bg-slate-900/80 border border-slate-800 rounded-xl p-4 cursor-pointer group">
+            <summary class="font-semibold text-white flex items-center justify-between">
+              <span>3. What is Gas and Gas Limit?</span>
+              <i class="fa-solid fa-chevron-down text-slate-500 group-open:rotate-180 transition"></i>
+            </summary>
+            <p class="text-slate-300 mt-2.5 leading-relaxed pl-2 border-l-2 border-emerald-500">
+              <strong>Answer:</strong> Gas is the execution fee required to perform a computational operation on the Ethereum Virtual Machine (EVM). Gas Limit is the maximum amount of gas the sender is willing to spend on a transaction. It prevents infinite loops in smart contract execution.
+            </p>
+          </details>
+
+          <!-- Q4 -->
+          <details class="bg-slate-900/80 border border-slate-800 rounded-xl p-4 cursor-pointer group">
+            <summary class="font-semibold text-white flex items-center justify-between">
+              <span>4. How does MetaMask fit into this architecture?</span>
+              <i class="fa-solid fa-chevron-down text-slate-500 group-open:rotate-180 transition"></i>
+            </summary>
+            <p class="text-slate-300 mt-2.5 leading-relaxed pl-2 border-l-2 border-emerald-500">
+              <strong>Answer:</strong> MetaMask acts as a non-custodial crypto wallet and Web3 provider. It injects the <code class="text-emerald-300">window.ethereum</code> object into the browser, securely signs transactions using the user's private key, and broadcasts them to the Ethereum node via JSON-RPC.
+            </p>
+          </details>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- DONATE MODAL -->
+  <div id="donate-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="glass-card rounded-2xl max-w-md w-full p-6 border border-slate-700 shadow-2xl space-y-4 animate-in fade-in zoom-in-95 duration-200">
+      
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <h3 class="text-base font-bold text-white flex items-center gap-2">
+          <i class="fa-solid fa-heart text-emerald-400"></i> Donate via Smart Contract
+        </h3>
+        <button onclick="closeDonateModal()" class="text-slate-400 hover:text-white text-lg">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div class="bg-slate-900/90 rounded-xl p-3 border border-slate-800 text-xs space-y-1">
+        <div class="text-slate-400">Target Campaign:</div>
+        <div id="modal-campaign-title" class="font-bold text-white text-sm truncate">Campaign Title</div>
+        <div class="flex items-center justify-between text-[11px] text-slate-400 pt-1">
+          <span>Target: <strong id="modal-campaign-target" class="text-emerald-400 font-mono">0.00 ETH</strong></span>
+          <span>Raised: <strong id="modal-campaign-raised" class="text-white font-mono">0.00 ETH</strong></span>
+        </div>
+      </div>
+
+      <!-- Quick Preset Buttons -->
+      <div class="space-y-1">
+        <label class="block text-xs font-medium text-slate-300">Choose Preset or Custom Amount:</label>
+        <div class="grid grid-cols-3 gap-2">
+          <button type="button" onclick="setPresetAmount('0.1')" class="preset-btn py-1.5 rounded-lg bg-slate-900 border border-slate-700 hover:border-emerald-500 text-xs font-mono font-medium text-slate-200">0.1 ETH</button>
+          <button type="button" onclick="setPresetAmount('0.5')" class="preset-btn py-1.5 rounded-lg bg-slate-900 border border-slate-700 hover:border-emerald-500 text-xs font-mono font-medium text-slate-200">0.5 ETH</button>
+          <button type="button" onclick="setPresetAmount('1.0')" class="preset-btn py-1.5 rounded-lg bg-slate-900 border border-slate-700 hover:border-emerald-500 text-xs font-mono font-medium text-slate-200">1.0 ETH</button>
+        </div>
+      </div>
+
+      <!-- Custom Amount Input -->
+      <div>
+        <label class="block text-xs font-medium text-slate-300 mb-1">Amount to Donate (ETH) *</label>
+        <div class="relative">
+          <input type="number" step="0.01" min="0.001" id="donate-amount-input" required placeholder="0.25"
+            class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white font-mono focus:outline-none focus:border-emerald-500 transition pr-16" />
+          <span class="absolute right-3 top-2.5 text-xs font-mono font-bold text-emerald-400">ETH</span>
+        </div>
+      </div>
+
+      <!-- Donor Note -->
+      <div>
+        <label class="block text-xs font-medium text-slate-300 mb-1">Transparency Note / Encouragement</label>
+        <input type="text" id="donate-message-input" placeholder="e.g. Wishing full recovery to the patient!"
+          class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2 text-xs text-white focus:outline-none focus:border-emerald-500 transition" />
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="pt-2 flex items-center justify-end gap-3">
+        <button type="button" onclick="closeDonateModal()" class="px-4 py-2 rounded-xl text-xs font-semibold text-slate-400 hover:text-white bg-slate-800 transition">
+          Cancel
+        </button>
+        <button type="button" id="confirm-donate-btn" onclick="executeDonation()" class="px-5 py-2 rounded-xl text-xs font-bold bg-emerald-500 text-slate-950 hover:bg-emerald-400 shadow-md shadow-emerald-500/20 transition flex items-center gap-2">
+          <i class="fa-solid fa-paper-plane"></i> Confirm & Send ETH
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- METAMASK LOCAL NETWORK HELPER MODAL -->
+  <div id="helper-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="glass-card rounded-2xl max-w-lg w-full p-6 border border-slate-700 shadow-2xl space-y-4">
+      
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <h3 class="text-base font-bold text-white flex items-center gap-2">
+          <i class="fa-solid fa-network-wired text-emerald-400"></i> Hardhat Local Network Details
+        </h3>
+        <button onclick="closeMetaMaskHelperModal()" class="text-slate-400 hover:text-white text-lg">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div class="text-xs text-slate-300 space-y-3">
+        <p>
+          To test with free local 10,000 ETH accounts, add this network into your MetaMask:
+        </p>
+
+        <div class="bg-slate-950 p-3.5 rounded-xl border border-slate-800 font-mono text-xs space-y-1.5 text-slate-300">
+          <div><span class="text-slate-500">Network Name:</span> Hardhat Local</div>
+          <div><span class="text-slate-500">RPC URL:</span> http://127.0.0.1:8545</div>
+          <div><span class="text-slate-500">Chain ID:</span> 31337</div>
+          <div><span class="text-slate-500">Currency Symbol:</span> ETH</div>
+        </div>
+
+        <p class="text-emerald-400 font-medium">
+          💡 Or click the 1-Click button below to add it automatically into MetaMask!
+        </p>
+      </div>
+
+      <div class="pt-2 flex items-center justify-between">
+        <button type="button" onclick="autoAddHardhatNetwork()" class="px-4 py-2 rounded-xl text-xs font-bold bg-emerald-500 text-slate-950 hover:bg-emerald-400 transition flex items-center gap-2">
+          <i class="fa-solid fa-bolt"></i> Auto-Add to MetaMask
+        </button>
+        <button type="button" onclick="closeMetaMaskHelperModal()" class="px-4 py-2 rounded-xl text-xs font-semibold text-slate-400 hover:text-white bg-slate-800 transition">
+          Close
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATION CONTAINER -->
+  <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+  <!-- FOOTER -->
+  <footer class="mt-auto border-t border-slate-800 bg-slate-950/70 py-6 text-xs text-slate-400">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div>
+        <span class="font-bold text-white">CharityChain</span> &copy; Final Year Computer Engineering Project
+        <span class="text-slate-600 mx-2">|</span> Savitribai Phule Pune University (SPPU)
+      </div>
+      <div class="flex items-center gap-4 text-xs font-mono">
+        <span id="footer-contract-addr" class="text-slate-500 truncate max-w-xs">Contract: Loading...</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Main JavaScript App -->
+  <script src="app.js"></script>
+</body>
+</html>
