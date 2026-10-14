@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>CharityChain - Project Report | SPPU BE Computer Engineering</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Times+New+Roman&family=Inter:wght@400;600;700&family=JetBrains+Mono&display=swap');
+    
+    @page {
+      size: A4;
+      margin: 20mm 20mm 20mm 20mm;
+    }
+
+    body {
+      font-family: 'Times New Roman', serif;
+      line-height: 1.6;
+      color: #111;
+      background: #f8fafc;
+      padding: 40px 20px;
+    }
+
+    .report-container {
+      max-width: 850px;
+      margin: 0 auto;
+      background: #fff;
+      padding: 60px 50px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+      border-radius: 8px;
+    }
+
+    .cover-page {
+      text-align: center;
+      padding: 60px 20px;
+      border: 3px double #333;
+      margin-bottom: 50px;
+      page-break-after: always;
+    }
+
+    .uni-title {
+      font-size: 22px;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .dept-title {
+      font-size: 16px;
+      font-weight: bold;
+      margin-top: 5px;
+      color: #333;
+    }
+
+    .report-badge {
+      font-size: 18px;
+      font-weight: bold;
+      text-decoration: underline;
+      margin: 40px 0 20px 0;
+    }
+
+    .project-name {
+      font-size: 26px;
+      font-weight: bold;
+      color: #047857;
+      margin: 20px 0;
+      line-height: 1.3;
+    }
+
+    .sub-info {
+      font-size: 15px;
+      margin: 15px 0;
+    }
+
+    .student-box {
+      margin-top: 50px;
+      display: flex;
+      justify-content: space-between;
+      text-align: left;
+      font-size: 15px;
+    }
+
+    h1, h2, h3 {
+      font-family: 'Inter', sans-serif;
+      color: #0f172a;
+    }
+
+    h2 {
+      border-bottom: 2px solid #059669;
+      padding-bottom: 5px;
+      margin-top: 35px;
+      font-size: 20px;
+      text-transform: uppercase;
+    }
+
+    h3 {
+      font-size: 16px;
+      margin-top: 20px;
+      color: #047857;
+    }
+
+    p, li {
+      font-size: 15px;
+      text-align: justify;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+      font-size: 14px;
+    }
+
+    th, td {
+      border: 1px solid #cbd5e1;
+      padding: 10px 12px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #f1f5f9;
+      font-weight: bold;
+      color: #1e293b;
+    }
+
+    code, pre {
+      font-family: 'JetBrains Mono', monospace;
+      background: #f1f5f9;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 13px;
+    }
+
+    pre {
+      padding: 15px;
+      overflow-x: auto;
+      border-left: 4px solid #059669;
+      line-height: 1.4;
+    }
+
+    .badge-pass {
+      color: #059669;
+      font-weight: bold;
+    }
+
+    .print-btn {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: #059669;
+      color: #fff;
+      padding: 10px 20px;
+      font-family: 'Inter', sans-serif;
+      font-weight: bold;
+      font-size: 14px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(5,150,105,0.3);
+    }
+    .print-btn:hover { background: #047857; }
+
+    @media print {
+      .print-btn { display: none; }
+      body { background: #fff; padding: 0; }
+      .report-container { box-shadow: none; padding: 0; }
+      .page-break { page-break-after: always; }
+    }
+  </style>
+</head>
+<body>
+
+  <button class="print-btn" onclick="window.print()">🖨️ Print / Save as PDF</button>
+
+  <div class="report-container">
+    
+    <!-- COVER PAGE -->
+    <div class="cover-page">
+      <div class="uni-title">Savitribai Phule Pune University</div>
+      <div class="dept-title">Department of Computer Engineering</div>
+      <div style="margin-top: 15px; font-size: 14px; color: #64748b;">Academic Year: 2025–2026</div>
+
+      <div class="report-badge">MINI PROJECT REPORT ON</div>
+
+      <div class="project-name">
+        CharityChain: A Decentralized and Transparent Charity Platform Using Blockchain Technology
+      </div>
+
+      <div class="sub-info">
+        <strong>Subject:</strong> Blockchain Technology (BCT) Laboratory<br>
+        <strong>Syllabus Reference:</strong> BE Computer Engineering, Syllabus #54/128, <strong>Problem No. 8</strong><br>
+        <em>"Develop a Blockchain based application for transparent and genuine charity"</em>
+      </div>
+
+      <div class="student-box">
+        <div>
+          <strong>Submitted By:</strong><br>
+          Sahil Agarwal<br>
+          BE Computer Engineering
+        </div>
+        <div style="text-align: right;">
+          <strong>Under the Guidance of:</strong><br>
+          Faculty Guide / Project In-Charge<br>
+          Department of Computer Engineering
+        </div>
+      </div>
+    </div>
+
+    <!-- 1. ABSTRACT -->
+    <h2>1. Abstract</h2>
+    <p>
+      Charity and crowdfunding organizations are essential pillars of modern society, providing vital financial assistance for emergency medical treatments, rural school infrastructure, and disaster rehabilitation. However, existing traditional centralized charity platforms are plagued by significant operational issues including lack of transparency, high administrative fees (deducting 3% to 10% of total donations), fund misappropriation, and declining public donor trust.
+    </p>
+    <p>
+      This project introduces <strong>CharityChain</strong>, a decentralized application (dApp) built on the Ethereum blockchain that eliminates third-party intermediaries. Powered by Solidity smart contracts (<code>CharityPlatform.sol</code>) executed deterministically on the Ethereum Virtual Machine (EVM), CharityChain acts as an autonomous cryptographic escrow. Funds contributed in Ether are locked in the smart contract and can only be withdrawn to verified beneficiary addresses once predefined conditions (funding target reached or deadline elapsed) are satisfied. Furthermore, every donation is permanently recorded onto an immutable public transparency ledger, granting donors, auditors, and regulators full mathematical visibility into fund flow. The system includes an automated unit testing suite in Hardhat and a modern Web3 responsive user interface with an offline simulation fallback for university laboratory demonstrations.
+    </p>
+
+    <!-- 2. TECH STACK -->
+    <h2>2. Complete Technology Stack</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Layer</th>
+          <th>Technology</th>
+          <th>Version</th>
+          <th>Role / Purpose</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Smart Contract</strong></td>
+          <td>Solidity</td>
+          <td><code>^0.8.20</code></td>
+          <td>Core smart contract language with built-in arithmetic overflow/underflow protection.</td>
+        </tr>
+        <tr>
+          <td><strong>Blockchain Engine</strong></td>
+          <td>Hardhat</td>
+          <td><code>^2.22.2</code></td>
+          <td>Local Ethereum node simulation (port 8545), Solidity compiler, and deployment framework.</td>
+        </tr>
+        <tr>
+          <td><strong>Web3 Client Library</strong></td>
+          <td>Ethers.js</td>
+          <td><code>v6.11.1</code></td>
+          <td>Facilitates JSON-RPC communication between browser and Ethereum node; BigInt handling.</td>
+        </tr>
+        <tr>
+          <td><strong>Crypto Wallet</strong></td>
+          <td>MetaMask</td>
+          <td>Browser Extension</td>
+          <td>Non-custodial Web3 wallet for signing transactions using user private keys (ECDSA).</td>
+        </tr>
+        <tr>
+          <td><strong>Frontend GUI</strong></td>
+          <td>HTML5 + Tailwind CSS</td>
+          <td>CDN</td>
+          <td>Modern glassmorphic, responsive interface with dual-mode Web3 & Lab Sim architecture.</td>
+        </tr>
+        <tr>
+          <td><strong>Local Server</strong></td>
+          <td>Express.js (Node.js)</td>
+          <td><code>v4.19.2</code></td>
+          <td>Lightweight web server hosting the frontend interface and contract ABI configuration.</td>
+        </tr>
+        <tr>
+          <td><strong>Automated Testing</strong></td>
+          <td>Mocha & Chai</td>
+          <td>Bundled with Hardhat</td>
+          <td>Comprehensive unit test suite verifying contract deployment, donations, and escrow rules.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- 3. ARCHITECTURE -->
+    <h2>3. System Architecture & Methodology</h2>
+    <p>
+      The architecture of CharityChain consists of three decoupled layers:
+    </p>
+    <ul>
+      <li><strong>Presentation Layer (Client Browser):</strong> Modern Web3 UI providing real-time donation cards, category filtering, a transparent transaction ledger, and a 1-click network helper.</li>
+      <li><strong>Execution & Wallet Layer (MetaMask & Ethers.js):</strong> Responsible for requesting user account access, converting human-readable Ether to Wei (10<sup>18</sup>), signing transactions with ECDSA cryptographic signatures, and dispatching JSON-RPC requests.</li>
+      <li><strong>Consensus & Storage Layer (Ethereum EVM & Solidity):</strong> Executes smart contract bytecodes, manages state storage variables, emits events, and holds Ether securely in autonomous escrow until programmatic release criteria are met.</li>
+    </ul>
+
+    <pre>
+[ Donor (MetaMask Wallet) ]
+           │
+           │  (Ethers.js JSON-RPC - Signed Transaction)
+           ▼
+[ Smart Contract Escrow (CharityPlatform.sol on EVM) ]
+           │
+   ┌───────┴──────────────────────────────┐
+   ▼                                      ▼
+[ Public Transparency Ledger ]    [ Condition Check: Target Met? ]
+(Immutable on-chain history)              │
+                                          │ (Code is Law: Zero Intermediary)
+                                          ▼
+                               [ Verified Beneficiary Address ]
+                                (Direct Transfer to Hospital / School)
+    </pre>
+
+    <!-- 4. TESTING & RESULTS -->
+    <h2>4. Testing & Verification</h2>
+    <p>
+      Smart contract security was verified using Hardhat's automated unit testing framework. All test cases passed with 100% success rate:
+    </p>
+    <table>
+      <thead>
+        <tr>
+          <th>Test Case</th>
+          <th>Description</th>
+          <th>Expected Outcome</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>TC-01</strong></td>
+          <td>Contract Deployment Initial State</td>
+          <td>Counters for campaigns and donations start at zero</td>
+          <td><span class="badge-pass">PASS ✅</span></td>
+        </tr>
+        <tr>
+          <td><strong>TC-02</strong></td>
+          <td>Campaign Creation</td>
+          <td>Struct properly initialized with target, deadline, and beneficiary</td>
+          <td><span class="badge-pass">PASS ✅</span></td>
+        </tr>
+        <tr>
+          <td><strong>TC-03</strong></td>
+          <td>Payable Donation & Ledger Record</td>
+          <td>Campaign balance increments and transparency array records donor address</td>
+          <td><span class="badge-pass">PASS ✅</span></td>
+        </tr>
+        <tr>
+          <td><strong>TC-04</strong></td>
+          <td>Access Control on Withdrawal</td>
+          <td>Reverts if an unauthorized address calls <code>withdrawFunds()</code></td>
+          <td><span class="badge-pass">PASS ✅</span></td>
+        </tr>
+        <tr>
+          <td><strong>TC-05</strong></td>
+          <td>Authorized Escrow Disbursal</td>
+          <td>Beneficiary receives accumulated Ether; contract updates status to completed</td>
+          <td><span class="badge-pass">PASS ✅</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- 5. CONCLUSION -->
+    <h2>5. Conclusion</h2>
+    <p>
+      The <strong>CharityChain</strong> application successfully demonstrates the application of blockchain technology to resolve transparency and trust deficits in charitable fundraising. By eliminating administrative intermediaries and enforcing code-based escrow fund distribution, the project proves that blockchain can deliver verifiable, fraud-resistant philanthropy.
+    </p>
+
+    <div style="margin-top: 50px; border-top: 1px solid #cbd5e1; padding-top: 20px; font-size: 13px; color: #64748b; text-align: center;">
+      Generated for Savitribai Phule Pune University (SPPU) BE Computer Engineering Project Submission.
+    </div>
+
+  </div>
+
+</body>
+</html>
