@@ -1,87 +1,141 @@
-# CharityChain 🌐
+# 🌐 CharityChain
 ### Decentralized & Transparent Charity Platform on Ethereum Blockchain
-**SPPU Final Year Computer Engineering - Blockchain Technology Mini Project (Option 8)**
+**Savitribai Phule Pune University (SPPU) - Final Year Computer Engineering**  
+*Course: Blockchain Technology (BCT) Laboratory | Syllabus Reference: Problem No. 8 (Page #54/128)*  
+*“Develop a Blockchain based application for transparent and genuine charity”*
 
 ---
 
-## 🚀 Quick Start (1-Click Run)
-
-### Option A: The Easiest Way (Double Click)
-Just double-click **`start-project.bat`** inside this folder!
-It will automatically:
-1. Start the local Ethereum Hardhat node (`http://127.0.0.1:8545`).
-2. Compile and deploy the `CharityPlatform.sol` smart contract.
-3. Seed 3 verified demo campaigns and real-time donations.
-4. Launch the web interface automatically in your browser at `http://localhost:3000`.
+## 🌟 Key Highlights
+- **100% Immutable Public Ledger:** Every donation (Donor address, amount, timestamp, custom note, and transaction hash) is publicly auditable on the blockchain.
+- **Zero Middlemen / 0% Admin Cut:** Peer-to-peer donation directly to the smart contract escrow; eliminates platform fee cuts.
+- **Smart Contract Escrow:** Funds are autonomously locked and can only be withdrawn to the verified beneficiary address once target is met or deadline passes.
+- **Dual Mode (Lab Sim & Web3):** Works seamlessly both with MetaMask on local/testnet EVM, as well as an offline simulation mode for college lab computers without internet or browser extensions.
+- **Automated Unit Testing:** 5 passing unit tests written in Mocha & Chai.
 
 ---
 
-### Option B: Using Command Line (Terminal)
-Open Terminal / PowerShell in this directory:
+## 🚀 How to Run the Project (Step-by-Step)
+
+### Option 1: The 1-Click Way (Easiest for Demo)
+Inside the project root folder `D:\bct be project\`:
+1. **Double-click `start-project.bat`**
+   - Starts the local Hardhat Ethereum node (`http://127.0.0.1:8545`).
+   - Automatically compiles and deploys `CharityPlatform.sol`.
+   - Seeds 3 demo campaigns with realistic donations.
+   - Starts the web server and opens **`http://localhost:5000`** in your browser!
+2. If the local blockchain is already running in one terminal, simply double-click **`start-frontend-only.bat`** to start and open the web app.
+
+---
+
+### Option 2: Running via Terminal / Command Prompt
+Open your terminal inside `D:\bct be project`:
+
 ```bash
-# 1. Install dependencies (Already done!)
+# Step 1: Install dependencies (if not already installed)
 npm install
 
-# 2. Run unit tests
-npm test
+# Step 2: Start the local Ethereum Blockchain Node
+npx hardhat node
 
-# 3. Start local node, deploy contract & run web app
-node run.js
+# Step 3: In a NEW terminal tab, deploy and seed the smart contract
+npx hardhat run scripts/deploy.js --network localhost
+npx hardhat run scripts/seed.js --network localhost
+
+# Step 4: Start the Web Application Server
+node server.js
 ```
-Then open: **`http://localhost:3000`** in your browser.
+Now open your browser and visit:  
+👉 **`http://localhost:5000`**
 
 ---
 
-## 🧪 Automated Unit Testing (For College Marks)
-Double-click **`run-tests.bat`** or run:
+## 🧪 How to Run Automated Unit Tests (For Examiner Marks)
+
+Double-click **`run-tests.bat`** OR run in terminal:
 ```bash
 npm test
 ```
-**Result:** 5 automated tests verifying campaign deployment, donations, event logs, access control, and fund withdrawal pass with 100% green checkmarks!
+### Expected Output:
+```text
+  CharityPlatform Smart Contract Tests
+    ✔ 1. Should deploy successfully with initial zero stats
+    ✔ 2. Should create a new campaign correctly
+    ✔ 3. Should accept donations, update campaign balance, and record transparency log
+    ✔ 4. Should reject unauthorized withdrawal
+    ✔ 5. Should allow beneficiary to withdraw once target is reached
 
----
-
-## 🌟 Key Features
-1. **Zero Intermediaries:** Donors send Ether directly to the smart contract escrow.
-2. **100% Immutable Public Ledger:** Every donation (Donor address, amount, timestamp, note, and transaction hash) is visible to everyone in the world.
-3. **Escrow Fund Release:** Funds can only be withdrawn to the verified beneficiary address once the target is met or deadline passes.
-4. **Dual Mode (Fail-Proof Demo):**
-   - **Web3 Mode:** Connects to MetaMask & Hardhat Local Node (Chain ID 31337).
-   - **Lab Sim Mode:** Works seamlessly even if the college computer does not have MetaMask or internet!
-
----
-
-## 📂 Project Architecture
+  5 passing (2s)
 ```
-D:\bct be project\
+*(Show this terminal output to the examiner during practical oral evaluation).*
+
+---
+
+## 🦊 How to Connect MetaMask (Local Network)
+
+1. Open your **MetaMask** extension.
+2. Go to **Settings** -> **Networks** -> **Add Network Manually**:
+   - **Network Name:** `Hardhat Local`
+   - **New RPC URL:** `http://127.0.0.1:8545`
+   - **Chain ID:** `31337`
+   - **Currency Symbol:** `ETH`
+3. Click **Save**.
+4. To get **10,000 Free Test ETH**:
+   - In MetaMask, click **Import Account**.
+   - Paste Account #0 private key printed in the Hardhat terminal:
+     `0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80`
+   - You now have 10,000 ETH to donate and test live on-chain!
+
+> 💡 *Note: You can also click the **"Local Network Helper"** button in the web app header to auto-add the network to MetaMask in 1 click!*
+
+---
+
+## 🏫 Offline / College Lab Demonstration Mode
+
+If the college laboratory PC has:
+- Restrictive firewall blocking RPC ports
+- No MetaMask extension installed
+- No internet access
+
+**Solution:** Simply click the **"Web3 Mode / Lab Sim Mode"** toggle button in the top-right corner of the website navbar.  
+The application seamlessly switches to a local simulation engine that records donations, increments progress bars, and generates realistic Ethereum transaction hashes without throwing any errors!
+
+---
+
+## 📂 Project Structure
+```text
+Charity-Chain/
 ├── contracts/
 │   └── CharityPlatform.sol       # Solidity Smart Contract (^0.8.20)
 ├── scripts/
-│   ├── deploy.js                 # Automated deployment script
-│   └── seed.js                   # Pre-populates realistic starter campaigns
+│   ├── deploy.js                 # Contract deployment script
+│   └── seed.js                   # Pre-populates 3 active causes & donations
 ├── test/
 │   └── CharityPlatform.test.js   # Automated unit tests (Chai / Mocha)
-├── public/                       # Frontend Web Application
-│   ├── index.html                # Modern Tailwind CSS & Responsive UI
+├── public/                       # Frontend Web UI
+│   ├── index.html                # Tailwind CSS responsive interface
 │   ├── app.js                    # Web3 Ethers.js v6 & Simulation Engine
-│   └── contractData.json         # Deployed contract address & ABI
-├── hardhat.config.js             # Hardhat configuration
-├── server.js                     # Express web server
-├── run.js                        # 1-click all-in-one runner script
-├── start-project.bat             # Windows 1-click batch launcher
-├── run-tests.bat                 # Windows 1-click unit test runner
-├── VIVA_QUESTIONS_AND_ANSWERS.md # 15+ Examiner Viva Q&As (Must Read!)
-└── PROJECT_REPORT.md             # Complete report template for submission
+│   └── contractData.json         # Deployed contract ABI & address
+├── hardhat.config.js             # Hardhat EVM network configuration
+├── server.js                     # Express web server (port 5000)
+├── run.js                        # All-in-one runner script
+├── start-project.bat             # 1-Click Master Launcher
+├── start-frontend-only.bat       # 1-Click Web App Launcher
+├── run-tests.bat                 # 1-Click Unit Test Runner
+├── push-to-github.bat            # 1-Click Git Push to GitHub
+├── VIVA_QUESTIONS_AND_ANSWERS.md # 15+ Examiner Viva Q&As with answers
+├── PROJECT_REPORT.md             # Complete Academic Project Report (Markdown)
+└── report.html                   # Formatted Printable PDF Project Report
 ```
 
 ---
 
-## 🦊 How to connect MetaMask to Localhost (Optional)
-If you want to use MetaMask:
-1. Open MetaMask -> Networks dropdown -> **Add a network manually**.
-2. **Network Name:** Hardhat Local
-3. **RPC URL:** `http://127.0.0.1:8545`
-4. **Chain ID:** `31337`
-5. **Currency Symbol:** `ETH`
-6. Click Save and import any private key printed in the console to get **10,000 free test ETH**!
-*(Or simply click "Auto-Add to MetaMask" inside the app helper modal).*
+## 📚 Viva Preparation & Academic Report
+- **Viva Questions & Answers:** See [`VIVA_QUESTIONS_AND_ANSWERS.md`](./VIVA_QUESTIONS_AND_ANSWERS.md) for top 15 external examiner questions, including "Why Blockchain instead of MySQL?", "What is Gas?", and "Reentrancy Protection".
+- **Printable Project Report:** Open [`report.html`](./report.html) in your browser and click **"Print / Save as PDF"** for a ready-to-submit project report.
+
+---
+
+## 👨‍💻 Author
+- **Student Name:** Sahil Agarwal  
+- **Course:** BE Computer Engineering, Savitribai Phule Pune University (SPPU)
